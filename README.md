@@ -20,8 +20,8 @@ A full-featured eCommerce platform built with Django. This project supports prod
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/django-ecommerce.git
-cd django-ecommerce
+git clone https://github.com/nishat248/Plantopia.git
+cd Plantopia
 ````
 
 ### 2. Create a Virtual Environment
