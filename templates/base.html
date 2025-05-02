@@ -1,0 +1,338 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Plantopia{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="{% url 'home' %}"><img src="{% static 'images/logo.png' %}" alt="Logo"></a>
+    </div>
+    
+
+    <ul class="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+
+        <li class="dropdown">
+            <a href="#" id="categories-btn">Categories <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown-content" id="categories-dropdown">
+                {% for category in categories %}
+                    {% if category.children.exists %}
+                        <div class="submenu">
+                            <a href="{% url 'category_products' category.slug %}">{{ category.name }}</a> 
+                            <div class="sub-dropdown">
+                                {% for sub in category.children.all %}
+                                <a href="{% url 'category_products' sub.slug %}">{{ sub.name }}</a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{% url 'category_products' category.slug %}">{{ category.name }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </li>
+        
+        
+
+        <li><a href="{% url 'blog' %}">Blog</a></li>
+
+        <li class="dropdown">
+            <a href="#" id="contact-btn">Contact <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown-content contact-dropdown" id="contact-dropdown">
+                <a href="tel:16255"><i class="fa-solid fa-phone"></i> Call Us</a>
+                <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="https://wa.me/yourwhatsapplink" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+            </div>
+        </li>
+
+        <li class="dropdown">
+            <a href="#" id="more-btn">More <i class="fa-solid fa-caret-down"></i></a>
+            <div class="dropdown-content" id="more-dropdown">
+                <a href="#">Cancel Order</a>
+                <a href="#">Rate Us</a>
+                <a href="#">Return Product</a>
+                <a href="#">Policies</a>
+                <a href="#">Help Center</a>
+                <a href="#">Reviews</a>
+                <a href="#">About Us</a>
+            </div>
+        </li>
+    </ul>
+
+    <form method="GET" action="{% url 'search' %}" class="search-form" style="display: flex; align-items: center;">
+        <input 
+            type="text" 
+            name="q" 
+            placeholder="Search products..." 
+            style="padding: 6px 12px; border: 1px solid #ccc; border-radius: 4px 0 0 4px; outline: none; width: 200px;">
+        <button 
+            type="submit" 
+            style="padding: 6px 12px; background-color: #5d7c19; border: 1px solid #5d7b1e; border-radius: 0 4px 4px 0; color: white; cursor: pointer;">
+            🔍
+        </button>
+    </form>
+    
+
+    <div class="nav-icons">
+        {% if user.is_authenticated %}
+            <a href="{% url 'wishlist' %}" class="icon-btn">
+            <i class="fa fa-heart"></i>
+            </a>
+            <a href="{% url 'cart' %}" class="icon-btn">
+            <i class="fa fa-shopping-cart"></i>
+            </a>
+        {% else %}
+            <a href="{% url 'login' %}?next={% url 'wishlist' %}" class="icon-btn" title="Please log in to view your wishlist">
+            <i class="fa fa-heart"></i>
+            </a>
+            <a href="{% url 'login' %}?next={% url 'cart' %}" class="icon-btn" title="Please log in to view your cart">
+            <i class="fa fa-shopping-cart"></i>
+            </a>
+        {% endif %}
+
+        <div class="dropdown account-dropdown">
+            <a href="#" id="account-btn">
+                <i class="fa-solid fa-user user-icon"></i>
+                {% if user.is_authenticated %}
+                    {{ user.username }}
+                {% endif %}
+                <i class="fa-solid fa-caret-down"></i>
+            </a>
+            <div class="dropdown-content" id="account-dropdown">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'account_details' %}">My Account</a>
+                    <a href="{% url 'my_orders' %}">My Orders</a>
+
+                    <a href="{% url 'my_reviews' %}">My Reviews</a>
+
+                    <a href="{% url 'cancelled_orders' %}">My Returns & Cancellations</a>
+
+                    <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="background: none; border: none; padding: 0; margin-left: 15px; color: white; font: inherit; cursor: pointer; text-align: left; width: 100%;">
+                            Logout
+                        </button>
+                        
+                    </form>
+                    
+                    
+                {% else %}
+                    <a href="#" id="login-link">Login</a>
+                    <a href="#" id="signup-link">Signup</a>
+                {% endif %}
+            </div>
+        </div>
+        
+        
+    </div>
+
+    
+</nav>
+<!--
+<p style="color: red; text-align: center;">
+    {% if user.is_authenticated %}
+        You are logged in as {{ user.username }}
+    {% else %}
+        You are not logged in.
+    {% endif %}
+</p>
+-->
+
+{% if profile and request.user.is_staff %}
+  <span>{{ profile.admin_title }}</span>
+{% endif %}
+
+
+<!-- Login Popup -->
+<div id="login-popup" class="popup-overlay">
+    <div class="popup-box">
+        <span class="close-btn" id="close-login">&times;</span>
+        <h2>Login</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <input type="text" name="username" placeholder="Username">
+            <input type="password" name="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
+        <p style="margin-top: 10px; font-size: 14px;">
+            Don't have an account?
+            <a href="#" id="popup-signup-link" style="color: #84b31f; font-weight: bold;">Sign up</a>
+        </p>
+        
+    </div>
+</div>
+{% if messages %}
+  <div class="popup-messages">
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+</div>
+</div>
+
+
+
+<!-- Signup Popup -->
+<div id="signup-popup" class="popup-overlay">
+    <div class="popup-box">
+        <span class="close-btn" id="close-signup">&times;</span>
+        <h2>Signup</h2>
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password1" placeholder="Password" required>
+            <input type="password" name="password2" placeholder="Confirm Password" required>
+            <button type="submit">Signup</button>
+        </form>
+        
+    </div>
+    {% if messages %}
+  <div class="popup-messages">
+    {% for message in messages %}
+      <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+</div>
+
+
+
+
+
+<!-- Page Content -->
+{% block content %}{% endblock %}
+
+<!-- Footer -->
+<footer class="site-footer">
+    <div class="newsletter">
+      <h2>Subscribe to our newsletter</h2>
+      <p>Stay updated with the latest plant care tips, new arrivals, and exclusive offers from Plantopia</p>
+      <form class="newsletter-form">
+        <input type="email" placeholder="Enter your email address">
+        <button type="submit">
+          <i class="fas fa-bell"></i> SUBSCRIBE
+        </button>
+      </form>
+    </div>
+  
+    <div class="footer-main">
+      <div class="footer-column">
+        <img src="{% static 'images/logo.png' %}" alt="Plantopia Logo" class="footer-logo">
+        <p><strong>Customer Support:</strong><br>+880 123-456-7890</p>
+        <p>74/A Green Road, Farmgate<br>Dhaka-1205, Bangladesh</p>
+        <p><a href="mailto:info@plantopia.com">info@plantopia.com</a></p>
+      </div>
+  
+      <div class="footer-column download-app">
+        <h3>Download App</h3>
+        <a href="#"><img src="{% static 'images/google-play.png' %}" alt="Google Play" class="app-icon"></a>
+        <a href="#"><img src="{% static 'images/app-store.png' %}" alt="App Store" class="app-icon"></a>
+      </div>
+    </div>
+  </footer>
+  
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-content').forEach(drop => drop.classList.remove('show'));
+        }
+
+        function setupDropdown(btnId, dropdownId) {
+            const btn = document.getElementById(btnId);
+            const dropdown = document.getElementById(dropdownId);
+            if (btn && dropdown) {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const isVisible = dropdown.classList.contains('show');
+                    closeAllDropdowns();
+                    if (!isVisible) {
+                        dropdown.classList.add('show');
+                    }
+                });
+            }
+        }
+
+        setupDropdown('categories-btn', 'categories-dropdown');
+        setupDropdown('contact-btn', 'contact-dropdown');
+        setupDropdown('account-btn', 'account-dropdown');
+        setupDropdown('more-btn', 'more-dropdown');
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown')) {
+                closeAllDropdowns();
+            }
+        });
+
+        const loginLink = document.getElementById('login-link');
+        const signupLink = document.getElementById('signup-link');
+        const loginPopup = document.getElementById('login-popup');
+        const signupPopup = document.getElementById('signup-popup');
+        const closeLogin = document.getElementById('close-login');
+        const closeSignup = document.getElementById('close-signup');
+        const popupSignupLink = document.getElementById('popup-signup-link');
+
+        if (loginLink) {
+            loginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginPopup.classList.add('show-popup');
+                signupPopup.classList.remove('show-popup');
+            });
+        }
+
+        if (signupLink) {
+            signupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                signupPopup.classList.add('show-popup');
+                loginPopup.classList.remove('show-popup');
+            });
+        }
+
+        if (popupSignupLink) {
+            popupSignupLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginPopup.classList.remove('show-popup');
+                signupPopup.classList.add('show-popup');
+            });
+        }
+
+        if (closeLogin) {
+            closeLogin.addEventListener('click', () => {
+                loginPopup.classList.remove('show-popup');
+            });
+        }
+
+        if (closeSignup) {
+            closeSignup.addEventListener('click', () => {
+                signupPopup.classList.remove('show-popup');
+            });
+        }
+
+        // Close popups if clicked outside
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('popup-overlay')) {
+                loginPopup.classList.remove('show-popup');
+                signupPopup.classList.remove('show-popup');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

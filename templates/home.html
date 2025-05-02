@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+
+<!-- Main Banner Section -->
+<div class="main-section">
+    <!-- Left Main Banner -->
+    <!-- Left Main Banner -->
+<div class="left-banner">
+    <div class="slider">
+        <div class="slide active">
+            <img src="{% static 'images/banner1.jpg' %}" alt="Banner 1">
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/banner2.jpg' %}" alt="Banner 2">
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/banner3.jpg' %}" alt="Banner 3">
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/banner4.jpg' %}" alt="Banner 4">
+        </div>
+
+        <div class="banner-text">
+            <h2>There's still Time to Spend<br>Something Green!</h2>
+            <button>
+                <img src="{% static 'images/shopnow.gif' %}" alt="Shop Now">
+            </button>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Right Small Banners -->
+    <div class="right-banners">
+        <div class="smallbanner">
+            <img src="{% static 'images/hmdecr.jpg' %}" alt="Home Decor">
+            <div class="banner-text">
+                <span class="tag">20% OFF</span>
+                <h3>HOME DECORATION</h3>
+                <button>SHOP NOW</button>
+            </div>
+        </div>
+
+        <div class="small-banner">
+            <img src="{% static 'images/tools.jpg' %}" alt="Tools">
+            <div class="banner-text">
+                <span class="tag red">50% OFF</span>
+                <span class="order-now">ORDER NOW</span>
+                <h3>TOOLS</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Best Deals Banner -->
+<div class="deal-banner">
+    <span class="deal-title">Best Deals</span>
+    <span class="deal-text">Deal ends in</span>
+    <span id="countdown" class="deal-timer">10d : 20h : 30m : 50s</span>
+  </div>
+  
+
+<!-- Product Grid -->
+<div class="product-grid">
+  {% for product in products %}
+  <div class="product-card">
+      <span class="best-deal-badge">Best Deal</span>
+
+      <a href="{% url 'product_detail' product.slug %}">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h3>{{ product.name }}</h3>
+      </a>
+      <p class="price">৳ {{ product.price }}</p>
+      <div class="product-footer">
+          <!-- Add to Cart Form -->
+          <form method="post" action="{% url 'add_to_cart' product.id %}" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="order-btn">
+                  ADD TO CART <span class="cart-icon">🛒</span>
+              </button>
+          </form>
+
+          <!-- Add to Wishlist Form -->
+          <form method="post" action="{% url 'add_to_wishlist' product.id %}" style="display: inline;">
+              {% csrf_token %}
+              <button type="submit" class="wishlist-icon" style="background: none; border: none;">
+                  🤍
+              </button>
+          </form>
+      </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+<!-- Categories Slider -->
+<section class="categories-section">
+    <h2>Shop with Categories</h2>
+    <div class="slider-container">
+      <button class="arrow left" onclick="moveSlider('left')">&#10094;</button>
+  
+      <div class="categories-slider">
+        {% for category in categories %}
+        <div class="category-card">
+          
+          <a href="{% url 'category_products' category.slug %}">
+            {% if category.image %}
+              <img src="{{ category.image.url }}" alt="{{ category.name }}">
+            {% else %}
+              <img src="{% static 'images/default-category.png' %}" alt="{{ category.name }}">
+            {% endif %}
+            <p>{{ category.name }}</p>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
+  
+      <button class="arrow right" onclick="moveSlider('right')">&#10095;</button>
+    </div>
+</section>
+
+  
+
+<script>
+    
+  const countdownElement = document.getElementById("countdown");
+  const endDate = new Date();
+  endDate.setDate(endDate.getDate() + 10);
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = endDate.getTime() - now;
+
+    if (distance <= 0) {
+      countdownElement.textContent = "Deal ended";
+      clearInterval(timerInterval);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    countdownElement.textContent = `${days}d : ${hours}h : ${minutes}m : ${seconds}s`;
+  }
+
+  const timerInterval = setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const slides = document.querySelectorAll('.slide');
+        let slideIndex = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+            });
+            slides[index].classList.add('active');
+        }
+
+        function nextSlide() {
+            slideIndex = (slideIndex + 1) % slides.length;
+            showSlide(slideIndex);
+        }
+
+        // Start automatic slideshow
+        showSlide(slideIndex);
+        setInterval(nextSlide, 3000); // Change every 4 seconds
+
+
+        document.querySelector('.arrow.left').addEventListener('click', function () {
+    document.querySelector('.categories-slider').scrollBy({ left: -200, behavior: 'smooth' });
+  });
+
+  document.querySelector('.arrow.right').addEventListener('click', function () {
+    document.querySelector('.categories-slider').scrollBy({ left: 200, behavior: 'smooth' });
+  });
+        
+    });
+
+
+
+function moveSlider(direction) {
+  const slider = document.querySelector('.categories-slider');
+  const scrollAmount = 220; // adjust based on your card width
+
+  if (direction === 'left') {
+    slider.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  } else {
+    slider.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  }
+}
+
+</script>
+{% endblock %}

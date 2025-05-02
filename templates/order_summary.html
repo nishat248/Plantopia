@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order_summary.css' %}">
+
+<div class="order-summary-wrapper">
+    <div class="order-summary-card">
+        <h2 class="title">Order Summary</h2>
+
+        <div class="details-grid">
+            <!-- Product Section -->
+            <div>
+                <h3 class="section-title">Product Details</h3>
+                {% for item in order_items %}
+                <div class="product-info">
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-image">
+                    <div>
+                        <p class="product-name">{{ item.product.name }}</p>
+                        <p class="product-meta">Category: {{ item.product.category.name }}</p>
+                        <p class="product-meta">Size: {{ item.product.size|default:"N/A" }}</p>
+                        <p class="product-price">
+                            {% if item.product.discount_price %}
+                                <span class="original-price">৳{{ item.product.price }}</span>
+                                <span class="discount-price">৳{{ item.product.discount_price }}</span>
+                            {% else %}
+                                ৳{{ item.product.price }}
+                            {% endif %}
+                        </p>
+                        <p class="product-meta">Quantity: {{ item.quantity }}</p>
+                        <p class="product-meta">Total: ৳{{ item.total_price|floatformat:2 }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                    <p>No products found in this order.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Shipping Info -->
+            <div>
+                <h3 class="section-title">Shipping Details</h3>
+                <div class="shipping-info">
+                    <p><strong>Name:</strong> {{ order.user.first_name }} {{ order.user.last_name }}</p>
+                    <p><strong>Email:</strong> {{ order.user.email }}</p>
+                    <p><strong>Phone:</strong> {{ order.user.profile.phone_number|default:"Not provided" }}</p>
+                    <p><strong>Address:</strong> {{ order.user.profile.address|default:"Not provided" }}</p>
+                    <p><strong>Date of Birth:</strong> {{ order.user.profile.date_of_birth|date:"d M Y"|default:"Not provided" }}</p>
+                    <p><strong>Gender:</strong> {{ order.user.profile.gender|default:"Not specified" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Billing Section -->
+        <div class="billing-summary">
+            <h3 class="section-title">Billing Summary</h3>
+            <div>
+                <p><strong>Subtotal:</strong> ৳{{ order.total_amount|floatformat:2 }}</p>
+                <p><strong>Shipping:</strong> ৳80.00</p>
+                <p class="total"><strong>Total:</strong> ৳{{ order.total_amount|add:80|floatformat:2 }}</p>
+            </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="payment-method">
+            <h3 class="section-title">Payment Method</h3>
+            <div class="radio-group">
+                <input type="radio" checked disabled>
+                <label>{{ order.payment_option }}</label>
+            </div>
+            <p class="note">* Other payment options coming soon.</p>
+        </div>
+
+        <!-- Confirm Button -->
+        <form action="{% url 'confirm_order' order.id %}" method="POST" class="confirm-form">
+            {% csrf_token %}
+            <button type="submit" class="confirm-btn">Confirm Order</button>
+        </form>
+
+        <!-- Shipping Address -->
+        <div class="shipping-address-box">
+            <h2>Shipping Address</h2>
+
+            {% if order.shipping_address %}
+                <p class="current-address">{{ order.shipping_address }}</p>
+                <button onclick="document.getElementById('change-address-form').style.display='block'" class="change-btn">
+                    Change Address
+                </button>
+
+                <form id="change-address-form" method="post" style="display:none;" class="change-form">
+                    {% csrf_token %}
+                    <input type="text" name="shipping_address" placeholder="Enter new address" required class="input-box">
+                    <button type="submit" class="save-btn">Save Address</button>
+                </form>
+            {% else %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="text" name="shipping_address" value="{{ profile.address }}" required class="input-box">
+                    <button type="submit" class="save-btn">Save Address</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

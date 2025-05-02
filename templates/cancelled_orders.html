@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cancelled_orders.css' %}">
+
+<div class="cancelled-orders-container">
+    <h2>My Cancelled Orders</h2>
+    {% if orders %}
+        {% for order in orders %}
+            <div class="cancelled-order-card">
+                <p><strong>Order #{{ order.id }}</strong></p>
+                <p>Date: {{ order.order_date|date:"M d, Y" }}</p>
+                <p>Total: ${{ order.total_amount|floatformat:2 }}</p>
+
+                <p>Status: {{ order.status }}</p>
+
+                <div class="order-items">
+                    <p><strong>Items:</strong></p>
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>{{ item.product.name }} (x{{ item.quantity }})</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-orders">You have no cancelled orders.</p>
+    {% endif %}
+</div>
+{% endblock %}

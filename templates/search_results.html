@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/category_products.css' %}">
+
+<!-- Search Results Title -->
+<div class="category-menu-bar">
+    <h2 style="margin: 0 auto;">Search results for "{{ query }}"</h2>
+</div>
+
+<!-- Search Result Products -->
+{% if products %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+      <a href="{% url 'product_detail' product.slug %}">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h3>{{ product.name }}</h3>
+      </a>
+      <p class="price">৳ {{ product.price }}</p>
+      <div class="product-footer">
+        <!-- Add to Cart Form -->
+        <form method="POST" action="{% url 'add_to_cart' product.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="addToCart-btn">
+            ADD TO CART <span class="cart-icon">🛒</span>
+          </button>
+        </form>
+
+        <!-- Add to Wishlist Form -->
+        <form method="POST" action="{% url 'add_to_wishlist' product.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="wishlist-icon" style="background:none; border:none; cursor:pointer;">
+            🤍
+          </button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+    <p style="text-align: center; font-size: 18px; margin-top: 40px;">No products found.</p>
+{% endif %}
+
+{% endblock %}

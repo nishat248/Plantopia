@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/order_success.css' %}">
+
+<div class="order-success-wrapper">
+    <div class="order-success-box">
+        <div class="success-icon">
+            <svg class="check-icon" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="12" fill="#557A46"/>
+                <path fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      d="M7 13l3 3 7-7"/>
+            </svg>
+        </div>
+        <p class="order-message">Your order is Successfully placed<br>Happy Planting !</p>
+        <div class="order-buttons">
+            <a href="{% url 'home' %}" class="btn green-btn">
+                <span>Continue Shopping</span>
+            </a>
+            <a href="{% url 'my_orders' %}" class="btn red-btn">
+                <span>View Order</span>
+                <span class="arrow">→</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

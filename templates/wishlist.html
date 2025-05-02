@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+<div class="wishlist-section">
+    <h2 style="color: darkred;">Wishlist</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Products</th>
+                <th>Price</th>
+                <th>Stock Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for item in wishlist_items %}
+            <tr>
+                <td>
+                    <img src="{{ item.product.image.url }}" alt="" style="width: 60px;">
+                    {{ item.product.name }}
+                </td>
+                <td>
+                    {% if item.product.discount_price %}
+                        <del>{{ item.product.original_price }}৳</del> {{ item.product.discount_price }}৳
+                    {% else %}
+                        {{ item.product.original_price }}৳
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.product.stock > 0 %}
+                        <span style="color: green;">IN STOCK</span>
+                    {% else %}
+                        <span style="color: red;">OUT OF STOCK</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if item.product.stock > 0 %}
+                        <a href="{% url 'add_to_cart' item.product.id %}" class="add-cart-btn">Add to Cart</a>
+                    {% else %}
+                        <button disabled class="out-stock-btn">Add to Cart</button>
+                    {% endif %}
+                    <a href="{% url 'remove_from_wishlist' item.product.id %}" class="remove-btn">✖</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+.order-success-wrapper {
+    background-color: #f9f3ef;
+    min-height: 70vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 20px;
+}
+
+.order-success-box {
+    text-align: center;
+}
+
+.success-icon {
+    margin-bottom: 20px;
+}
+
+.check-icon {
+    width: 70px;
+    height: 70px;
+}
+
+.order-message {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 30px;
+    color: #000;
+}
+
+.order-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.green-btn {
+    background-color: #557A46;
+}
+
+.green-btn:hover {
+    background-color: #46683b;
+}
+
+.red-btn {
+    background-color: #a21010;
+}
+
+.red-btn:hover {
+    background-color: #7f0c0c;
+}
+
+.arrow {
+    margin-left: 10px;
+    font-size: 16px;
+}

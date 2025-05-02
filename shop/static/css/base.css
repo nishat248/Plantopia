@@ -1,0 +1,382 @@
+/* General */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f8f8f8;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* Navbar */
+.navbar {
+    background: #7C8B52;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+}
+
+.logo img {
+    height: 80px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links > li > a {
+    color: white;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+
+.nav-links li:hover > a {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background: #bbd378;
+    border-radius: 8px;
+    padding: 10px;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    z-index: 99;
+}
+
+
+
+.dropdown-content a {
+    display: block;
+    padding: 8px 12px;
+    color: white;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.dropdown-content a:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.submenu {
+    position: relative;
+}
+
+.sub-dropdown {
+    display: none;
+    position: absolute;
+    left: 95%; /* instead of 100%, move it slightly left */
+    top: 0;
+    background-color: #adc272;
+    border-radius: 8px;
+    padding: 10px;
+    min-width: 180px;
+}
+
+
+
+.submenu:hover .sub-dropdown {
+    display: block;
+}
+
+/* Nav icons */
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.icon-btn {
+    color: white;
+    font-size: 20px;
+}
+
+.user-icon {
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* Contact dropdown */
+.contact-dropdown a i {
+    margin-right: 8px;
+}
+
+/* Account dropdown */
+.account-dropdown .dropdown-content {
+    right: 0;
+    left: auto;
+}
+
+/* Popup */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.popup-box {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    position: relative;
+}
+
+.popup-box input {
+    width: 90%;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.popup-box button {
+    background-color: #7C8B52;;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 6px;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+}
+
+
+
+/* Dropdowns */
+.dropdown {
+    position: relative;
+}
+.dropdown > a i {
+    margin-left: 5px;
+    font-size: 12px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #b0c772;; /* olive tone with transparency */
+    min-width: 180px;
+    z-index: 1000;
+    padding: 10px 0;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
+    border-radius: 4px;
+}
+
+.dropdown-content a {
+    color: #fff;
+    padding: 10px 15px;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd(100, 140, 20, 0.9);
+}
+
+
+.show {
+    display: block !important;
+}
+
+/* Nested Sub-dropdown (optional styling for submenu) */
+.sub-dropdown {
+    margin-left: 15px;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Popup Styles */
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-box {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    width: 350px;
+    max-width: 90%;
+    position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.popup-box h2 {
+    margin-top: 0;
+}
+
+.popup-box input,
+.popup-box button {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.popup-box button {
+    background-color: #7C8B52;;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.popup-box button:hover {
+    background-color: #7C8B52;;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
+
+.show-popup {
+    display: flex !important;
+}
+
+.site-footer {
+    background-color: #7C8B52;;
+    color: #fff;
+    padding: 40px 20px;
+    font-family: Arial, sans-serif;
+}
+
+.newsletter {
+    text-align: center;
+    background-color: #7C8B52 !important;
+    padding-bottom: 20px;
+}
+
+.newsletter h2 {
+    font-size: 22px;
+    margin-bottom: 10px;
+}
+
+.newsletter p {
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.newsletter-form {
+    display: inline-flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.newsletter-form input[type="email"] {
+    padding: 8px;
+    border: none;
+    width: 250px;
+    border-radius: 3px;
+}
+
+.newsletter-form button {
+    background-color: #e11b1e;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 20px;
+}
+
+.footer-logo {
+    width: 100px;
+    margin-bottom: 10px;
+}
+
+.download-app .app-icon {
+    display: block;
+    margin: 10px 0;
+    width: 140px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .footer-main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-column {
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .newsletter-form input[type="email"] {
+        width: 90%;
+    }
+}
+.popup-messages {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+}
+.message {
+    padding: 10px 20px;
+    background-color: #f44336;
+    color: white;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+.message.success {
+    background-color: #4CAF50;
+}
+

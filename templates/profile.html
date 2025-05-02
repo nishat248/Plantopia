@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+
+  <div class="profile-container">
+    <!-- Profile Picture -->
+    <div class="profile-box">
+      <div class="profile-pic">
+        <h2>{{ user.username }}</h2>
+        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture">
+
+        <!-- Form for updating profile picture -->
+        <form method="post" enctype="multipart/form-data" action="{% url 'update_profile_picture' %}">
+          {% csrf_token %}
+          <input type="file" name="profile_picture" accept="image/*">
+          <button type="submit" class="submit_button">Update Picture</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Profile Details -->
+    <div class="profile-box">
+      <div class="profile-details">
+        <h2>My Profile</h2>
+        <form method="post" enctype="multipart/form-data" action="{% url 'account_details' %}">
+          {% csrf_token %}
+
+          <label>Full Name</label>
+          <input type="text" name="full_name" value="{{ user.first_name }} {{ user.last_name }}">
+
+          <label>Email</label>
+          <input type="email" name="email" value="{{ user.email }}">
+
+          {{ form.as_p }} <!-- Renders the profile fields from the form -->
+
+          <button type="submit" name="profile">Save Changes</button>
+        </form>
+
+        <h2>Change Password</h2>
+        <!-- Password Change Form -->
+        <form method="post">
+          {% csrf_token %}
+          {{ password_form.as_p }}
+          <button type="submit" name="password">Change Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

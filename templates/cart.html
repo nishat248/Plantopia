@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+
+<div class="cart-container">
+    <div class="cart-items">
+        {% for item in cart_items %}
+        <div class="cart-item">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="product-image">
+
+            <div class="item-details">
+                <h4>{{ item.product.name }}</h4>
+                <p>Price: {{ item.product.discount_price|default:item.product.price }}৳</p>
+                <form method="post" action="{% url 'update_cart_quantity' item.id %}">
+                    {% csrf_token %}
+                    <div class="quantity-controls">
+                        <button type="submit" name="action" value="decrease">−</button>
+                        <span>{{ item.quantity }}</span>
+                        <button type="submit" name="action" value="increase">+</button>
+                    </div>
+                </form>
+            </div>
+
+            <form method="post" action="{% url 'remove_from_cart' item.id %}" class="remove-form">
+                {% csrf_token %}
+                <button type="submit" class="remove-btn">✕</button>
+            </form>
+        </div>
+        {% empty %}
+        <p>Your cart is empty.</p>
+        {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+        <h3>Cart Totals</h3>
+        <p>Sub-total: <span>{{ sub_total }}৳</span></p>
+        <hr>
+        <p class="total">Total: <span>{{ total }}৳</span></p>
+        {% if cart_items %}
+        <a href="{% url 'order_summary' %}" class="checkout-btn">CHECKOUT →</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

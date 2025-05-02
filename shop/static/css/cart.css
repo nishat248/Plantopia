@@ -1,0 +1,111 @@
+.cart-container {
+    display: flex;
+    gap: 40px;
+    padding: 40px;
+    justify-content: space-between;
+    background-color: #f5f5f5;
+}
+
+.cart-items {
+    flex: 2;
+}
+
+.cart-item {
+    display: flex;
+    background: #fff;
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    align-items: center;
+    justify-content: space-between; /* Align details and remove btn horizontally */
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 20px;
+}
+
+.item-details {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.item-details h4 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.item-details p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.quantity-controls button {
+    background: #84b31f;
+    border: none;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.remove-form {
+    margin: 0;
+    align-self: flex-start; /* Top-align the remove button */
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: #d11a2a;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.cart-summary {
+    flex: 1;
+    background: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cart-summary h3 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.cart-summary p {
+    margin: 10px 0;
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.cart-summary .total {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.checkout-btn {
+    margin-top: 20px;
+    display: inline-block;
+    padding: 12px 25px;
+    background: #84b31f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+}

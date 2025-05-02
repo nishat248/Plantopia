@@ -1,0 +1,64 @@
+.my-reviews-container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.my-reviews-container h2 {
+    text-align: center;
+    color: #2d2d2d;
+    margin-bottom: 25px;
+}
+
+.review-item {
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review-header strong {
+    font-size: 18px;
+    color: #333;
+}
+
+.review-rating {
+    color: #666;
+    margin-top: 8px;
+}
+
+.review-comment {
+    margin: 10px 0;
+    font-style: italic;
+    color: #444;
+}
+
+.review-date {
+    font-size: 13px;
+    color: #999;
+}
+
+.delete-icon-btn {
+    background: transparent;
+    border: none;
+    color: #e74c3c;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+}
+
+.delete-icon-btn:hover {
+    color: #c0392b;
+}

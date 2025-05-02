@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/category_products.css' %}">
+
+<!-- Categories Menu Bar -->
+<div class="category-menu-bar">
+    {% for cat in categories %}
+        <a href="{% url 'category_products' cat.slug %}" class="{% if cat.slug == category.slug %}active{% endif %}">
+            {{ cat.name }}
+        </a>
+    {% endfor %}
+</div>
+
+<!-- Subcategories or Products -->
+{% if subcategories %}
+<div class="subcategory-grid">
+    {% for subcat in subcategories %}
+      <div class="subcategory-card">
+        <a href="{% url 'category_products' subcat.slug %}">
+          {% if subcat.image %}
+            <img src="{{ subcat.image.url }}" alt="{{ subcat.name }}">
+          {% else %}
+            <img src="{% static 'images/default-category.png' %}" alt="{{ subcat.name }}">
+          {% endif %}
+          <h3>{{ subcat.name }}</h3>
+        </a>
+      </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+      <a href="{% url 'product_detail' product.slug %}">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <h3>{{ product.name }}</h3>
+      </a>
+      <p class="price">৳ {{ product.price }}</p>
+      <div class="product-footer">
+        <!-- Add to Cart Form -->
+        <form method="POST" action="{% url 'add_to_cart' product.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="quantity" value="1">
+          <button type="submit" class="addToCart-btn">
+            ADD TO CART <span class="cart-icon">🛒</span>
+          </button>
+        </form>
+    
+        <!-- Add to Wishlist Form -->
+        <form method="POST" action="{% url 'add_to_wishlist' product.id %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit" class="wishlist-icon" style="background:none; border:none; cursor:pointer;">
+            🤍
+          </button>
+        </form>
+      </div>
+    </div>
+    
+    {% endfor %}
+</div>
+{% endif %}
+
+{% endblock %}
