@@ -1,4 +1,4 @@
-# 🛍️ Django eCommerce Website
+# 🛍️ Plantopia
 
 A full-featured eCommerce platform built with Django. This project supports product browsing, cart and wishlist management, user authentication, order handling, and a simple blog section for articles.
 
