@@ -66,8 +66,10 @@ class Product(models.Model):
         default=0,
         validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
-
     best_deal = models.BooleanField(default=False)
+
+    # 🔥 NEW: Owner (user who added the product)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name="products")
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -75,7 +77,8 @@ class Product(models.Model):
         super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return f"{self.name} - by {self.owner.username if self.owner else 'Unknown'}"
+
 
 
 class Cart(models.Model):

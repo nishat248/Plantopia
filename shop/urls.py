@@ -45,6 +45,11 @@ urlpatterns = [
     path('category/<slug:slug>/', views.category_products, name='category_products'),
     path('product/<slug:slug>/', views.product_detail, name='product_detail'),
 
+    path('add-product/', views.add_product, name='add_product'),
+    path('update-product/<slug:slug>/', views.update_product, name='update_product'),
+    path('delete-product/<slug:slug>/', views.delete_product, name='delete_product'),
+
+
     # Orders
     path('order-now/<int:product_id>/', views.order_now, name='order_now'),
     path('order-summary/', views.order_summary_view, name='order_summary'),  # For cart flow

@@ -122,3 +122,59 @@
     border-radius: 8px;
   }
   
+
+  /* Add New Product Button */
+.add-product-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 20px 0;
+}
+
+.add-product-btn:hover {
+    background-color: #218838;
+}
+
+
+
+
+
+
+
+/* Container to make buttons stack vertically */
+.product-buttons {
+    display: flex;
+    flex-direction: column;  /* Stack buttons vertically */
+    gap: 10px;               /* Space between the buttons */
+    align-items: flex-start; /* Align buttons to the left */
+}
+
+/* Edit Product Button */
+.edit-product-btn {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 10px; /* Add space below */
+}
+
+.edit-product-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Delete Product Button */
+.delete-product-btn {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.delete-product-btn:hover {
+    background-color: #c82333;
+}

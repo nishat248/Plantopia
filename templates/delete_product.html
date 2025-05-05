@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/category_products.css' %}">
+    <h2>Are you sure you want to delete the product "{{ product.name }}"?</h2>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <button type="submit">Yes, Delete</button>
+        <a href="{% url 'category_products' product.category.slug %}">Cancel</a>
+    </form>
+    
+{% endblock %}

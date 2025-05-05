@@ -14,6 +14,10 @@ from .models import Blog
 from django.db.models import Q
 from .models import Product
 
+from django.http import Http404
+from .forms import ProductForm
+
+
 
 
 def home(request):
@@ -141,6 +145,8 @@ def logout_view(request):
     return redirect('home')
 
 
+
+# List products by category
 def category_products(request, slug):
     category = get_object_or_404(Category, slug=slug)
     categories = Category.objects.filter(parent__isnull=True)
@@ -153,11 +159,58 @@ def category_products(request, slug):
         'products': products,
     })
 
-
+# Product details and reviews
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
     reviews = Review.objects.filter(product=product)
     return render(request, 'product_detail.html', {'product': product, 'reviews': reviews})
+
+# Add a new product
+@login_required
+def add_product(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.owner = request.user  # Set the user as the owner
+            product.save()
+            return redirect('product_detail', slug=product.slug)  # Redirect to the product details page
+    else:
+        form = ProductForm()
+    return render(request, 'create_product.html', {'form': form})
+
+# Update an existing product
+@login_required
+def update_product(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    
+    # Ensure the user is the owner of the product
+    if product.owner != request.user:
+        raise Http404("You are not allowed to edit this product")
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('product_detail', slug=product.slug)
+    else:
+        form = ProductForm(instance=product)
+    return render(request, 'update_product.html', {'form': form, 'product': product})
+
+# Delete an existing product
+@login_required
+def delete_product(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    
+    # Ensure the user is the owner of the product
+    if product.owner != request.user:
+        raise Http404("You are not allowed to delete this product")
+    
+    if request.method == 'POST':
+        product.delete()
+        return redirect('category_products', slug=product.category.slug)  # Redirect to category page
+    return render(request, 'delete_product.html', {'product': product})
+
 
 
 
